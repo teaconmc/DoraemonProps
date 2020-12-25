@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[35,)"
+license="MIT"
+issueTrackerURL="https://github.com/teaconmc/DoraemonProps/issues"
+
+[[mods]]
+    modId="doraemon_props"
+    version="${file.jarVersion}"
+    displayName="Doraemon's Props"
+    # updateJSONURL="http://myurl.me/"
+    # displayURL="http://example.com/"
+    # logoFile="examplemod.png"
+    credits="Fujiko Fujio"
+    authors="teacon"
+    description="An example mod of teacon 2021"
