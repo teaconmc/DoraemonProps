@@ -1,3 +1,4 @@
 {
-  "item.doraemon_props.bamboo_copter": "Bamboo-copter"
+  "item.doraemon_props.bamboo_copter": "Bamboo-copter",
+  "item.doraemon_props.bamboo_copter.desc": "Press the jump key to go up, press the sneak key to go down"
 }
