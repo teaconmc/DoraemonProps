@@ -1,13 +1,18 @@
 package org.teacon.doraemonprops.client.model;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @OnlyIn(Dist.CLIENT)
-public class BambooCopterModel extends BipedModel<LivingEntity> {
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+public final class BambooCopterModel extends BipedModel<LivingEntity> {
     public BambooCopterModel(float modelSize) {
         super(modelSize);
 

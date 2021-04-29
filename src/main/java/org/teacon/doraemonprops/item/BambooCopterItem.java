@@ -1,5 +1,6 @@
 package org.teacon.doraemonprops.item;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
@@ -23,7 +24,9 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-public class BambooCopterItem extends ArmorItem {
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+public final class BambooCopterItem extends ArmorItem {
     private static final ResourceLocation TEXTURE = new ResourceLocation(DoraemonProps.MOD_ID, "textures/entity/bamboo_copter.png");
     private static final double UP_DOWN_SPEED = 0.1;
 
@@ -32,13 +35,21 @@ public class BambooCopterItem extends ArmorItem {
     }
 
     @Override
-    @ParametersAreNonnullByDefault
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return false;
     }
 
     @Override
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
+        if (world.isRemote) {
+            adjustPlayerMotion(player);
+        }
+        // TODO: 2021/1/1 目前并没有效果，还是无法抑制摔落伤害
+        player.fallDistance = 0;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void adjustPlayerMotion(PlayerEntity player) {
         Vector3d motion = player.getMotion();
         if (isJumpKeyDown()) {
             player.setMotion(motion.x, UP_DOWN_SPEED, motion.z);
@@ -51,30 +62,30 @@ public class BambooCopterItem extends ArmorItem {
         if (!player.isOnGround()) {
             player.setMotion(motion.x, getJitterDistance(player.ticksExisted), motion.z);
         }
-        // TODO: 2021/1/1 目前并没有效果，还是无法抑制摔落伤害
-        player.fallDistance = 0;
     }
 
+    @OnlyIn(Dist.CLIENT)
     private boolean isJumpKeyDown() {
         return Minecraft.getInstance().gameSettings.keyBindJump.isKeyDown();
     }
 
+    @OnlyIn(Dist.CLIENT)
     private boolean isSneakKeyDown() {
         return Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown();
     }
 
+    @OnlyIn(Dist.CLIENT)
     private double getJitterDistance(int ticksExisted) {
         return MathHelper.cos(ticksExisted / 5f) / 100f;
     }
 
-    @Nullable
     @Override
+    @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("unchecked")
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A defaultModel) {
         return (A) new BambooCopterModel(1.02f);
     }
 
-    @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         return TEXTURE.toString();
@@ -82,7 +93,6 @@ public class BambooCopterItem extends ArmorItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new TranslationTextComponent("item.doraemon_props.bamboo_copter.desc"));
     }
